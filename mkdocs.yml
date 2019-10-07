@@ -1,18 +1,30 @@
 site_name: DolARK
+
+theme:
+    name: mkdocs
+
 nav:
     - Home: index.md
-    - About: about.md
-    - Shocks: shocks.md
+    - Single Agent: single_agent.md
     - Equilibrium: equilibrium.md
     - Perturbation: perturbation.md
     - Krussell-Smith: krussell_smith.md
+    - Shocks: shocks.md
 
 markdown_extensions:
   - markdown.extensions.admonition
   - pymdownx.arithmatex
+  - pymdownx.highlight:
+      use_pygments: true
+      extend_pygments_lang: [yaml]
   - pymdownx.superfences
+
+extra_css:
+    - css/extra.css
 
 extra_javascript:
   # other extra java script
   - mathjax-config.js
-  - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+  - https://cdn.jsdelivr.net/npm/vega@5
+  - https://cdn.jsdelivr.net/npm/vega-lite@3
+  - https://cdn.jsdelivr.net/npm/vega-embed@5

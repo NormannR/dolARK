@@ -66,9 +66,22 @@ aggmodel = KrussellSmith(model, sol0.dr)
 aggmodel # TODO: find a reasonable representation of this object
 
 # %%
+
+# %%
 # We can now solve for the aggregate equilibrium
 eq = aggmodel.find_steady_state()
 eq
+
+# %%
+# alternative way to plot equilibrium
+import altair as alt
+df = eq.as_df()
+spec = alt.Chart(df).mark_line().encode(
+    x = 'a',
+    y = 'μ',
+    color = 'i_m:N'
+)
+spec
 
 # %%
 # lot's look at the aggregate equilibrium
@@ -82,14 +95,38 @@ plt.title("Wealth Distribution by Income")
 
 # %%
 # alternative way to plot equilibrium
+# TODO: function to generate it automatically.
+
 import altair as alt
+single = alt.selection_single(on='mouseover', nearest=True)
 df = eq.as_df()
-spec = alt.Chart(df).mark_line().encode(
+ch = alt.Chart(df)
+spec = ch.properties(title='Distribution', height=100).mark_line().encode(
     x = 'a',
     y = 'μ',
-    color = 'i_m:N'
+    color = alt.condition(single, 'i_m:N', alt.value('lightgray'))
+).add_selection(
+        single
+) + ch.mark_line(color='black').encode(
+    x = 'a',
+    y = 'sum(μ)'
+) & ch.properties(title='Decision Rule', height=100).mark_line().encode(
+    x = 'a',
+    y = 'i',
+    color = alt.condition(single, 'i_m:N', alt.value('lightgray'))
+).add_selection(
+        single
 )
-spec
+
+# %%
+
+# Resulting object can be saved to a file. (try to open this file in jupyterlab)
+open('distrib.json','tw').write(spec.to_json())
+
+# %%
+
+# %%
+import xarray
 
 # %%
 # now we compute the perturbation
